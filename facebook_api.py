@@ -50,11 +50,10 @@ def me():
                 page_id=page.id,
             )
             db.session.add(post)
-
         db.session.commit()
 
-        pages = Page.query.all()
-        print(pages)
+        # query pages
+        # pages = Page.query.all()
 
 
 if __name__ == '__main__':
