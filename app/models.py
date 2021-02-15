@@ -29,6 +29,10 @@ class Page(db.Model):
         db.Integer,
         default=0
     )
+    picture = db.Column(
+        db.Text,
+        default='[]'
+    )
 
     def __repr__(self):
         return '<Pages {}>'.format(self.page_token)
