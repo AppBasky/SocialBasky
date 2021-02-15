@@ -3,7 +3,7 @@ import os
 import requests
 from dotenv import load_dotenv
 load_dotenv()
-from app.models import Page
+from app.models import Page, db
 
 from app import init_app
 
@@ -20,9 +20,20 @@ def me():
 
         resp = requests.get(url=url, params=params)
         data = resp.json()
-        print(data)
+
+        page = Page(
+            id=data['id'],
+            page_token=data['page_token'],
+            about=data['about'],
+            engagement_count=data['engagement']['count'],
+            engagement_social_sentence=data['engagement']['social_sentence'],
+            fan_count=data['fan_count'],
+        )
+        db.session.add(page)
+        db.session.commit()
 
         pages = Page.query.all()
+        print(pages)
 
 
 if __name__ == '__main__':
