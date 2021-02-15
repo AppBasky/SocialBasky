@@ -3,7 +3,7 @@ import os
 import requests
 from dotenv import load_dotenv
 load_dotenv()
-from app.models import Page, db
+from app.models import Page, db, Post
 
 from app import init_app
 import json
@@ -36,8 +36,21 @@ def me():
             engagement_count=data['engagement']['count'],
             engagement_social_sentence=data['engagement']['social_sentence'],
             fan_count=data['fan_count'],
+            picture=json.dumps(data['picture']['data'])
         )
         db.session.add(page)
+        db.session.commit()
+
+        for p_data in data['posts']['data']:
+            post = Post(
+                id=p_data['id'],
+                picture=p_data['picture'],
+                status_type=p_data['status_type'],
+                full_picture=p_data['full_picture'],
+                page_id=page.id,
+            )
+            db.session.add(post)
+
         db.session.commit()
 
         pages = Page.query.all()
